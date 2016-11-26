@@ -1,21 +1,30 @@
-MIT License
+import os
+from setuptools import setup
 
-Copyright 2016 Wesovilabs Iván Corrales Solera <developer@wesovilabs,com>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+setup(
+    name = "wesovilabs_tensorflow_samples",
+    version = "0.0.1",
+    author = "Iván Corrales Solera",
+    author_email = "developer@wesovilabs.com",
+    description = ("Samples of how to use tensorflow in a real environment."),
+    license = "MIT",
+    keywords = "tensorflow neuronal network",
+    url = "http://packages.python.org/wesovilabs_tensorflow_samples",
+    packages=['wesovilabs_tensorflow_samples', 'tests'],
+    long_description=read('README.md'),
+    classifiers=[
+        "Development Status :: 2 - Pre-Alpha",
+        "Topic :: Tutorials",
+        "License :: MIT License",
+    ],
+    entry_points = {
+        'console_scripts': [
+            'wesovilabs_tf_samples = wesovilabs_tensorflow_samples.wesovilabs_tensorflow_samples:main',
+        ]
+    }
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+)

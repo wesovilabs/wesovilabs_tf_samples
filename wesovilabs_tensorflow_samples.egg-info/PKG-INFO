@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: wesovilabs-tensorflow-samples
+Version: 0.0.1
+Summary: Samples of how to use tensorflow in a real environment.
+Home-page: http://packages.python.org/wesovilabs_tensorflow_samples
+Author: Iván Corrales Solera
+Author-email: developer@wesovilabs.com
+License: MIT
+Description: # tensorflow_neuronal_network_demo
+Keywords: tensorflow neuronal network
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Topic :: Tutorials
+Classifier: License :: MIT License

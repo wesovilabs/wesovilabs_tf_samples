@@ -1,0 +1,11 @@
+setup.py
+tests/__init__.py
+wesovilabs_tensorflow_samples/__init__.py
+wesovilabs_tensorflow_samples/__main__.py
+wesovilabs_tensorflow_samples/claims.py
+wesovilabs_tensorflow_samples/wesovilabs_tensorflow_samples.py
+wesovilabs_tensorflow_samples.egg-info/PKG-INFO
+wesovilabs_tensorflow_samples.egg-info/SOURCES.txt
+wesovilabs_tensorflow_samples.egg-info/dependency_links.txt
+wesovilabs_tensorflow_samples.egg-info/entry_points.txt
+wesovilabs_tensorflow_samples.egg-info/top_level.txt
