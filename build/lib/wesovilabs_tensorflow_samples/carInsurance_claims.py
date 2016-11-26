@@ -15,7 +15,7 @@ flags.DEFINE_string( "train_data",  "",  "Path to the training data.")
 flags.DEFINE_string( "test_data",   "",   "Path to the test data.")
 
 def _prepare_date():
-    return "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.data", "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.test"
+    return "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.csv", "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.csv"
 
 
 def _download_resource(url):

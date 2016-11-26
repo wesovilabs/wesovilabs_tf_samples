@@ -9,7 +9,7 @@ flags = tf.app.flags
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string("model_dir", "", "Base directory for output models.")
-flags.DEFINE_string("model_type", "", "Valid model types: {'wide', 'deep', 'wide_n_deep'}.")
+flags.DEFINE_string("model_type", "deep", "Valid model types: {'wide', 'deep', 'wide_n_deep'}.")
 flags.DEFINE_string("train_data", "", "Path to the training data.")
 flags.DEFINE_string("test_data", "", "Path to the test data.")
 flags.DEFINE_integer("train_steps", 4, "Number of training steps.")
@@ -21,7 +21,7 @@ CONTINUOUS_COLUMNS = [ "age", "years_of_driving_license" ]
 LABEL_COLUMN = "label"
 
 def _prepare_date():
-    return "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.data", "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.test"
+    return "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.csv", "/Users/Ivan/Sandbox/WesoviLabs/wesovilabs_tensorflow_samples/data/car_insurance.csv"
 
 
 def _download_resource(url):
@@ -55,21 +55,22 @@ def build_estimator(model_dir):
     """Build an estimator."""
 
     #Categorical base columns
-    country = tf.contrib.layers.sparse_column_with_hash_bucket("car", hash_bucket_size=1000)
+    country = tf.contrib.layers.sparse_column_with_hash_bucket("country", hash_bucket_size=1000)
 
     #Continuous base columns
     age = tf.contrib.layers.real_valued_column("age")
-    years_of_driving_license = tf.contrib.layers.real_valued_column("driving-license-experience")
+    years_of_driving_license = tf.contrib.layers.real_valued_column("years_of_driving_license")
 
     # Transformations.
     age_buckets = tf.contrib.layers.bucketized_column(age, boundaries=[18, 25, 30, 35, 40, 45, 50, 55, 60, 65])
-    years_of_driving_license_buckets = tf.contrib.layers.bucketized_column(age, boundaries=[1, 2, 3, 5, 10, 15, 25])
+    years_of_driving_license_buckets = tf.contrib.layers.bucketized_column(years_of_driving_license, boundaries=[1, 2, 3, 5, 10, 15, 25])
 
 
     wide_columns = [
         country,
-        age,
-        years_of_driving_license,
+        age_buckets,
+        years_of_driving_license_buckets,
+        tf.contrib.layers.crossed_column([country, age_buckets], hash_bucket_size=int(1e4)),
         """
         tf.contrib.layers.crossed_column([age, years_of_driving_license], hash_bucket_size=int(1e4)),
         tf.contrib.layers.crossed_column([age, salary], hash_bucket_size=int(1e4)),
@@ -78,9 +79,14 @@ def build_estimator(model_dir):
     ]
 
     deep_columns = [
-        country,
         age,
-        years_of_driving_license
+        years_of_driving_license,
+        """
+        tf.contrib.layers.embedding_column(country, dimension=8),
+        tf.contrib.layers.embedding_column(age_buckets, dimension=8),
+        tf.contrib.layers.embedding_column(years_of_driving_license_buckets, dimension=8),
+        """
+
     ]
 
     if FLAGS.model_type == "wide":
@@ -96,7 +102,6 @@ def build_estimator(model_dir):
             linear_feature_columns=wide_columns,
             dnn_feature_columns=deep_columns,
             dnn_hidden_units=[100, 50])
-    print(m)
     return m
 
 def input_fn(df):
@@ -117,6 +122,10 @@ def input_fn(df):
   # Converts the label column into a constant Tensor.
   label = tf.constant(df[LABEL_COLUMN].values)
   # Returns the feature columns and the label.
+  print('\n\n')
+  print(feature_cols)
+  print(label)
+  print('\n\n')
   return feature_cols, label
 
 def main(_):
@@ -124,16 +133,12 @@ def main(_):
     df_train = pd.read_csv(
         tf.gfile.Open(train_file_name),
         names=COLUMNS,
-        skipinitialspace=True,
         sep=',',
-        header=1,
         engine="python")
     df_test = pd.read_csv(
         tf.gfile.Open(test_file_name),
         names=COLUMNS,
-        skipinitialspace=True,
         sep=',',
-        header=1,
         engine="python")
 
     df_train = df_train.dropna(how='any', axis=0)
@@ -146,7 +151,7 @@ def main(_):
     print("model directory = %s" % model_dir)
 
     m = build_estimator(model_dir)
-    m.fit(input_fn=lambda: input_fn(df_train, True), steps=FLAGS.train_steps)
+    m.fit(input_fn=lambda: input_fn(df_train), steps=FLAGS.train_steps)
     results = m.evaluate(input_fn=lambda: input_fn(df_test), steps=1)
     for key in sorted(results):
         print("%s: %s" % (key, results[key]))
