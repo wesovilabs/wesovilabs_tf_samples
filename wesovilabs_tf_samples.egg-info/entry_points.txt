@@ -1,3 +1,0 @@
-[console_scripts]
-wesovilabs_tf_samples = wesovilabs_tf_samples.wesovilabs_tf_samples:main
-
