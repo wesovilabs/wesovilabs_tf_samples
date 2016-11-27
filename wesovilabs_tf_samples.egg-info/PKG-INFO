@@ -1,8 +1,8 @@
 Metadata-Version: 1.1
-Name: wesovilabs-tensorflow-samples
+Name: wesovilabs-tf-samples
 Version: 0.0.1
 Summary: Samples of how to use tensorflow in a real environment.
-Home-page: http://packages.python.org/wesovilabs_tensorflow_samples
+Home-page: http://packages.python.org/wesovilabs_tf_samples
 Author: Iván Corrales Solera
 Author-email: developer@wesovilabs.com
 License: MIT

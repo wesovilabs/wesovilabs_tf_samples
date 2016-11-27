@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 .idea
 *.iml
 *.pyc
+=======
+dist
+build
+.idea
+>>>>>>> master
